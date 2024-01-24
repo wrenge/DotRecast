@@ -1247,14 +1247,14 @@ namespace DotRecast.Detour
 
             int ip = poly.index;
 
-            using var verts = RcRentedArray.RentDisposableArray<float>(m_maxVertPerPoly * 3);
+            using var verts = RcRentedArray.Rent<float>(m_maxVertPerPoly * 3);
             int nv = poly.vertCount;
             for (int i = 0; i < nv; ++i)
             {
-                RcArrays.Copy(tile.data.verts, poly.verts[i] * 3, verts.AsRentedArray(), i * 3, 3);
+                RcArrays.Copy(tile.data.verts, poly.verts[i] * 3, verts.AsArray(), i * 3, 3);
             }
 
-            if (!DtUtils.PointInPolygon(pos, verts.AsRentedArray(), nv))
+            if (!DtUtils.PointInPolygon(pos, verts.AsArray(), nv))
             {
                 return false;
             }

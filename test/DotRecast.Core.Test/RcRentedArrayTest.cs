@@ -65,36 +65,36 @@ public class RcRentedArrayTest
     {
         // not same
         {
-            using var r1 = RcRentedArray.RentDisposableArray<float>(1024);
-            using var r2 = RcRentedArray.RentDisposableArray<float>(1024);
+            using var r1 = RcRentedArray.Rent<float>(1024);
+            using var r2 = RcRentedArray.Rent<float>(1024);
 
-            Assert.That(r2.AsRentedArray() != r1.AsRentedArray(), Is.EqualTo(true));
+            Assert.That(r2.AsArray() != r1.AsArray(), Is.EqualTo(true));
         }
 
         // same
         {
             // error case 
             float[] r1Array;
-            using (var r1 = RcRentedArray.RentDisposableArray<float>(1024))
+            using (var r1 = RcRentedArray.Rent<float>(1024))
             {
-                r1Array = r1.AsRentedArray();
+                r1Array = r1.AsArray();
                 for (int i = 0; i < r1.Length; ++i)
                 {
                     r1[i] = 123;
                 }
             }
 
-            using var r2 = RcRentedArray.RentDisposableArray<float>(1024);
+            using var r2 = RcRentedArray.Rent<float>(1024);
 
-            Assert.That(r2.AsRentedArray() == r1Array, Is.EqualTo(true));
-            Assert.That(r2.AsRentedArray().Sum(), Is.EqualTo(0));
+            Assert.That(r2.AsArray() == r1Array, Is.EqualTo(true));
+            Assert.That(r2.AsArray().Sum(), Is.EqualTo(0));
         }
     }
 
     [Test]
     public void TestDispose()
     {
-        var r1 = RcRentedArray.RentDisposableArray<float>(1024);
+        var r1 = RcRentedArray.Rent<float>(1024);
         for (int i = 0; i < r1.Length; ++i)
         {
             r1[i] = 123;
@@ -103,6 +103,6 @@ public class RcRentedArrayTest
         Assert.That(r1.IsDisposed, Is.EqualTo(false));
         r1.Dispose();
         Assert.That(r1.IsDisposed, Is.EqualTo(true));
-        Assert.That(r1.AsRentedArray(), Is.Null);
+        Assert.That(r1.AsArray(), Is.Null);
     }
 }
